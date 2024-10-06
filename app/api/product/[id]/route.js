@@ -1,15 +1,16 @@
 import Product from "@/models/Product";
+import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   const id = params.id;
   const product = await Product.findById(id).populate("category");
   console.log({ product });
-  return Response.json(product);
+  return NextResponse.json(product);
 }
 
 export async function DELETE(request, { params }) {
   const id = params.id;
-  return Response.json(await Product.findByIdAndDelete(id));
+  return NextResponse.json(await Product.findByIdAndDelete(id));
 }
 
 export async function PUT(request, {params}) {
@@ -18,7 +19,7 @@ export async function PUT(request, {params}) {
   const {...updateData } = body;
   const product = await Product.findByIdAndUpdate(id, updateData, { new: true });
   if (!product) {
-    return Response("Product not found", { status: 404 });
+    return NextResponse("Product not found", { status: 404 });
   }
-  return Response.json(product);
+  return NextResponse.json(product);
 }

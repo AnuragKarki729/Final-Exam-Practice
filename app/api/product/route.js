@@ -1,7 +1,8 @@
 import Product from "@/models/Product";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  return Response.json(await Product.find());
+  return NextResponse.json(await Product.find());
 }
 
 export async function POST(request) {
@@ -9,7 +10,7 @@ export async function POST(request) {
   console.log(body)
   const product = new Product(body);
   await product.save();
-  return Response.json(product);
+  return NextResponse.json(product);
 }
 
 export async function PUT(request) {

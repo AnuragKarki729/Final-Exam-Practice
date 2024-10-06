@@ -12,7 +12,7 @@ export async function GET(request) {
       .sort({ order: -1 })
       .skip(startIndex)
       .limit(size)
-    return Response.json(categories)
+    return NextResponse.json(categories)
   }
 
   const s = request.nextUrl.searchParams.get("s")
@@ -20,20 +20,20 @@ export async function GET(request) {
     const categories = await Category
       .find({ name: { $regex: s, $options: 'i' } })
       .sort({ order: -1 })
-    return Response.json(categories)
+    return NextResponse.json(categories)
   }
 
   const categories = await Category.find().sort({ order: -1 })
-  return Response.json(categories)
+  return NextResponse.json(categories)
 } catch{
-  return Response.json({ message: 'Error' })
+  return NextResponse.json({ message: 'Error' })
 }}
 
 export async function POST(request) {
   const body = await request.json()
   const category = new Category(body)
   await category.save()
-  return Response.json(category)
+  return NextResponse.json(category)
 }
 
 
@@ -42,5 +42,5 @@ export async function POST(request) {
 export async function PUT(request) {
   const body = await request.json()
   const category = await Category.findByIdAndUpdate(body._id, body)
-  return Response.json(category)
+  return NextResponse.json(category)
 }
