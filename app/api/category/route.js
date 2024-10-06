@@ -23,14 +23,14 @@ export async function GET(request) {
   }
 
   const categories = await Category.find().sort({ order: -1 })
-  return NextResponse.json(categories)
+  return Response.json(categories)
 }
 
 export async function POST(request) {
   const body = await request.json()
   const category = new Category(body)
   await category.save()
-  return NextResponse.json(category)
+  return Response.json(category)
 }
 
 
