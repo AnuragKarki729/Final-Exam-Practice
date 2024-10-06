@@ -2,6 +2,7 @@ import Category from "@/models/Category";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
+  try{
   // console.log('GET /api/category',request.nextUrl.searchParams.get("pno"))
   const pno = request.nextUrl.searchParams.get("pno")
   if (pno) {
@@ -24,7 +25,9 @@ export async function GET(request) {
 
   const categories = await Category.find().sort({ order: -1 })
   return Response.json(categories)
-}
+} catch{
+  return Response.json({ message: 'Error' })
+}}
 
 export async function POST(request) {
   const body = await request.json()
