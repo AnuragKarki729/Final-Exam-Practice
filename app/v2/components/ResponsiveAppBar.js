@@ -93,15 +93,14 @@ export default function ResponsiveAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
 
-              <MenuItem key={1} onClick={() => router.push('./product')}>
+              <MenuItem key={1} onClick={() => router.push('/v2/product')}>
                 <Typography sx={{ textAlign: 'center' }}>Products</Typography>
               </MenuItem>
-              <MenuItem key={2} onClick={() => router.push('./category')}>
+              <MenuItem key={2} onClick={() => router.push('/v2/category')}>
                 <Typography sx={{ textAlign: 'center' }}>Categories</Typography>
               </MenuItem>
-
-              <MenuItem key={3} onClick={() => router.push('./supplier')}>
-                <Typography sx={{ textAlign: 'center' }}>Supplier</Typography>
+              <MenuItem key={3} onClick={() => router.push('/v2/supplier')}>
+                <Typography sx={{ textAlign: 'center' }}>Suppliers</Typography>
               </MenuItem>
 
             </Menu>
@@ -128,19 +127,28 @@ export default function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
               key={1}
-              onClick={() => router.push('./product')}
+              onClick={() => router.push('/v2/product')}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-              Products
+              Product
             </Button>
 
             <Button
               key={2}
-              onClick={() => router.push('./category')}
+              onClick={() => router.push('/v2/category')}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Categories
             </Button>
+
+            <Button
+              key={3}
+              onClick={() => router.push('/v2/supplier')}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Supplier
+            </Button>
+
 
             {/* {pages.map((page) => (
               <Button
@@ -154,9 +162,9 @@ export default function ResponsiveAppBar() {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              {/* <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/public/next.svg" />
-              </IconButton> */}
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                User
+              </IconButton>
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}

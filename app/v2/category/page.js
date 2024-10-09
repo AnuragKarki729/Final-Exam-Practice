@@ -1,42 +1,62 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 
-import CategoryForm from "@/app/components/forms/CategoryForm";
-import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import CategoryForm from "@/app/v2/components/forms/CategoryForm";
 import Link from "next/link";
 
 import { DataGrid, GridToolbar , GridRowsProp, GridColDef } from "@mui/x-data-grid";
 
 import Modal from "@mui/material/Modal";
 
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import ImageIcon from "@mui/icons-material/Image";
+import WorkIcon from "@mui/icons-material/Work";
+import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 
 import IconButton from "@mui/material/IconButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { useForm } from "react-hook-form";
+import ResponsiveAppBar from "../components/ResponsiveAppBar";
 
 export default function Home() {
+
+
+  const onValid = (data) => {
+    console.log("Form is valid:", data);
+  };
+
+
+  const onInvalid = (errors) => {
+    console.log("Form has errors:", errors);
+  };
+
   const [category, setCategory] = useState([]);
   const columns = [
     { field: "name", headerName: "Category Name", width: 150 },
-    { field: 'order', headerName: 'Orders', width: 150 },
+    { field: 'order', headerName: 'Order', width: 150 },
   ];
 
-  const {register, handleSubmit, reset} = useForm();
-
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-  const APIBASE = API_BASE
   console.log(`${API_BASE}/category`);
   async function fetchCategory() {
-    const data = await fetch(`${APIBASE}/category`);
+    try {
+    const data = await fetch(`${API_BASE}/category`);
     const c = await data.json();
     const c2 = c.map((category) => {
       category.id = category._id;
       return category;
     });
     setCategory(c2);
-  }
+  } catch(error) {
+    console.error(error);
+  }}
 
   const [editMode, setEditMode] = useState(false)
+  const {register, handleSubmit, reset} = useForm();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -45,16 +65,14 @@ export default function Home() {
     fetchCategory();
   }, []);
 
-  
-
-  function createCategory(data){
-    handleCategoryFormSubmit(data)
+  function createCategory(data) {
+    handleCategoryFormSubmit(data);
   }
 
-  const handleCategoryFormSubmit=(data)=> {
+  function handleCategoryFormSubmit(data) {
     if (editMode) {
       // data.id = data._id
-      fetch(`${APIBASE}/category`, {
+      fetch(`/${API_BASE}/category`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -65,9 +83,8 @@ export default function Home() {
         fetchCategory()
       });
       return
-    }else{
-      console.log(data)
-    fetch(`${APIBASE}/category`, {
+    }
+    fetch(`/api/category`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,14 +94,14 @@ export default function Home() {
       reset({ name: '', order: '' })
       fetchCategory()
     });
-  }}
+  }
 
   return (
     <main>
       <ResponsiveAppBar/>
-       <form onSubmit={handleSubmit(createCategory)}>
+      <form onSubmit={handleSubmit(handleCategoryFormSubmit)}>
         <div className="grid grid-cols-2 gap-4 w-fit m-4">
-          <div>Category:</div>
+          <div>Category :</div>
           <div>
             <input
               name="name"
@@ -132,16 +149,16 @@ export default function Home() {
       </form> 
       <div className="mx-4">
         <span>Category ({category.length})</span>
-        <IconButton aria-label="new-category" color="secondary" onClick={handleOpen}>
+        {/* <IconButton aria-label="new-category" color="secondary" onClick={handleOpen}>
           <AddBoxIcon />
-        </IconButton>
+        </IconButton> */}
         <Modal
           open={open}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CategoryForm onSubmit={handleSubmit(createCategory)} />
+          <CategoryForm onSubmit={handleSubmit(onValid)} />
         </Modal>
         <DataGrid
           slots={{
